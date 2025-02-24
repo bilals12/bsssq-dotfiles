@@ -1,189 +1,147 @@
-#  ___
-# |_ _| |_ __ _ _   _   
-#  | || __/ _` | | | |  github: https://github.com/itaysharir
-#  | || || (_| | |_| |  reddit: u/visible-pop-2576
-# |___|\__\__,_|\__, |  dotfiles: https://github.com/itaysharir/Dotfiles
-#               |___/  
+# Path to your oh-my-zsh installation.
+# Reevaluate the prompt string each time it's displaying a prompt
+setopt prompt_subst
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit
+compinit
+source <(kubectl completion zsh)
+complete -C '/usr/local/bin/aws_completer' aws
 
-### Export ###
-export TERM="xterm-256color"  # proper colors
-export ZSH="$HOME/.oh-my-zsh" # omz directory
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+bindkey '^w' autosuggest-execute
+bindkey '^e' autosuggest-accept
+bindkey '^u' autosuggest-toggle
+bindkey '^L' vi-forward-word
+bindkey '^k' up-line-or-search
+bindkey '^j' down-line-or-search
 
-# add stuff to $PATH
-export PATH=$PATH:/Users/itaysharir/.spicetify        # add spicetify to $PATH
-export PATH="$HOME/.emacs.d/bin:$PATH"                # Add doom executable to $PATH
-export PATH="/opt/homebrew/opt/sphinx-doc/bin:$PATH"  # add sphinx to $PATH
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG=~/.config/starship/starship.toml
 
-# pacman
-export BOOTSTRAP=/opt/pacman
-export PATH=$BOOTSTRAP/bin:$PATH
+# you may need to manually set your language environment
+export LANG=en_US.UTF-8
 
-# locale
-export LANG="en_US.UTF-8"
-export LC_COLLATE="en_US.UTF-8"
-export LC_CTYPE="en_US.UTF-8"
-export LC_MESSAGES="en_US.UTF-8"
-export LC_MONETARY="en_US.UTF-8"
-export LC_NUMERIC="en_US.UTF-8"
-export LC_TIME="en_US.UTF-8"
-export LC_CTYPE="en_US.UTF-8"
+export EDITOR=/opt/homebrew/bin/nvim
 
-### Aliases ###
-# brew
-alias bw='brew'
-alias bwI='brew install'
-alias bwE='brew reinstall'
-alias bwR='brew remove'
-bwU () {
-    echo "Updating homebrew itself:"
-    brew update
-    echo "_______________________________"
-    echo " "
-    brew upgrade
-    echo "Everything is up-to-date."
-}
-alias bwO='brew outdated'
-alias bwT='brew tap'
-alias bwL='brew list'
-alias bwLp='brew list | wc -l'
-alias bwS='brew services'
-alias bwRestart='brew services restart'
-alias bwStart='brew services start'
-alias bwStop='brew services stop'
-bwH () {
-    echo "List of brew aliases:"
-    echo "_______________________________"
-    echo " "
-    echo "bw          =      brew"
-    echo "bwI         =      brew install"
-    echo "bwE         =      brew reinstall"
-    echo "bwR         =      brew remove"
-    echo "bwU         =      update everything"
-    echo "bwO         =      brew outdated"
-    echo "bwS         =      brew services"
-    echo "bwRestart   =      brew services restart"
-    echo "bwStart     =      brew services start"
-    echo "bwStop      =      brew services stop"
-}
+alias la=tree
+alias cat=bat
+alias brew='arch -arm64 brew'
 
-# macports
-alias pr='port'
-alias prI='sudo port install'
-alias prL='port list'
-alias prLp='port list | wc -l'
-prE () {
-    sudo port uninstall $1 && sudo port install $1
-}
-alias prR='sudo port uninstall'
-prU () {
-    echo "Updating macports itself:"
-    sudo port selfupdate
-    echo "Macports is up-to-date."
-    echo "_______________________________"
-    echo " "
-    echo "Upadating packages..."
-    sudo port upgrade outdated
-    echo "Everything is up-to-date."
-}
-alias prO='port outdated'
-prH () {
-    echo "List of port aliases:"
-    echo "_______________________________"
-    echo " "
-    echo "pr          =      port"
-    echo "prI         =      sudo port install"
-    echo "prE         =      sudo port uninstall <package> && sudo port install <package>"
-    echo "prR         =      sudo port uninstall"
-    echo "prU         =      update everything"
-    echo "prO         =      port outdated"
-}
+# Git
+alias gc="git commit -m"
+alias gca="git commit -a -m"
+alias gp="git push origin HEAD"
+alias gpu="git pull origin"
+alias gst="git status"
+alias glog="git log --graph --topo-order --pretty='%w(100,0,6)%C(yellow)%h%C(bold)%C(black)%d %C(cyan)%ar %C(green)%an%n%C(bold)%C(white)%s %N' --abbrev-commit"
+alias gdiff="git diff"
+alias gco="git checkout"
+alias gb='git branch'
+alias gba='git branch -a'
+alias gadd='git add'
+alias ga='git add -p'
+alias gcoall='git checkout -- .'
+alias gr='git remote'
+alias gre='git reset'
 
-# shorten commands
-alias cle='clear'
-alias ne='neofetch'
-alias v="nvim"
+# Docker
+alias dco="docker compose"
+alias dps="docker ps"
+alias dpa="docker ps -a"
+alias dl="docker ps -l -q"
+alias dx="docker exec -it"
 
-# shpotify
-alias play='spotify play'                         # play a song on spotify
-alias pause='spotify pause'                       # pause a song on spotify
-alias liked='spotify play list Liked Songs'       # play song from liked songs
-alias next='spotify next'                         # skip a track
-alias prev='spotify prev'                         # go back to the previous track
-alias jumpto='spotify pos'                        # jump to a spacific moment in the song (usage: jumpto <time>)
-alias nowplaying='spotify status'                 # see details about currently playing song
-alias shuffle='spotify toggle shuffle'            # toggle shuffle
+# Dirs
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
 
-# git
-alias addup='git add -u'
-alias addall='git add .'
-alias add='git add'
-alias branch='git branch'
-alias checkout='git checkout'
-alias clone='git clone'
-alias commit='git commit -m'
-alias fetch='git fetch'
-alias pull='git pull origin'
-alias push='git push origin'
-alias stat='git status'  # 'status' is protected name so using 'stat' instead
-alias tag='git tag'
+# GO
+export GOPATH='/Users/bilal/go'
 
-# source .zshrc
-alias src='source ~/.zshrc' # apply changes made in .zshrc without closing zsh
+# VIM
+alias v="/Users/bilal/.nix-profile/bin/nvim"
 
-# rickroll
-alias rr='open https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+# Nmap
+alias nm="nmap -sC -sV -oN nmap"
 
-# emacs and doom emacs
-alias em="emacsclient -t"                         # launch an emacs client quickly in the terminal
-# alias emacs="emacsclient -c"                      # launch an emacs client quickly
-alias doomsync="~/.emacs.d/bin/doom sync"         # sync doom emacs plugins
-alias doomdoctor="~/.emacs.d/bin/doom doctor"     # check doom emacs for errors
-alias doomupgrade="~/.emacs.d/bin/doom upgrade"   # upgrade doom emacs
-alias doompurge="~/.emacs.d/bin/doom purge"       # purge plugins in doom emacs
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/bilal/.vimpkg/bin:${GOPATH}/bin:/Users/bilal/.cargo/bin
 
-# shorten cd ../../../
-alias .1='cd ..'              
-alias .2='cd ../..'           
-alias .3='cd ../../..'        
-alias .4='cd ../../../..'     
-alias .5='cd ../../../../..'  
+alias cl='clear'
 
-# when creating a directory, create all parent directories
-alias mkdir='mkdir -pv'
+# K8S
+export KUBECONFIG=~/.kube/config
+alias k="kubectl"
+alias ka="kubectl apply -f"
+alias kg="kubectl get"
+alias kd="kubectl describe"
+alias kdel="kubectl delete"
+alias kl="kubectl logs"
+alias kgpo="kubectl get pod"
+alias kgd="kubectl get deployments"
+alias kc="kubectx"
+alias kns="kubens"
+alias kl="kubectl logs -f"
+alias ke="kubectl exec -it"
+alias kcns='kubectl config set-context --current --namespace'
+alias podname=''
 
-# confrimations
-alias mv='mv -i' 
-alias cp='cp -i' 
-alias ln='ln -i' 
+# HTTP requests with xh!
+alias http="xh"
 
-### function to easily extract files ###
-# usage: ex <file>
-ex () {
-    if [ -f "$1" ] ; then
-     case $file in
-       *.tar.bz2)   tar xjf $1   ;;
-       *.tar.gz)    tar xzf $1   ;;
-       *.bz2)       bunzip2 $1   ;;
-       *.rar)       unrar x $1   ;;
-       *.gz)        gunzip $1    ;;
-       *.tar)       tar xf $1    ;;
-       *.tbz2)      tar xjf $1   ;;
-       *.tgz)       tar xzf $1   ;;
-       *.zip)       unzip $1     ;;
-       *.Z)         uncompress $1;;
-       *.7z)        7z x $1      ;;
-       *.deb)       ar x $1      ;;
-       *.tar.xz)    tar xf $1    ;;
-       *.tar.zst)   unzstd $1    ;;
-       *)           echo "'$1' cannot be extracted via ex()" ;;
-     esac
-   else
-     echo "'$1' is not a valid file"
-   fi
-}
+# VI Mode!!!
+bindkey jj vi-cmd-mode
+
+# Eza
+alias l="eza -l --icons --git -a"
+alias lt="eza --tree --level=2 --long --icons --git"
+alias ltree="eza --tree --level=2  --icons --git"
+
+# SEC STUFF
+alias gobust='gobuster dir --wordlist ~/security/wordlists/diccnoext.txt --wildcard --url'
+alias dirsearch='python dirsearch.py -w db/dicc.txt -b -u'
+alias massdns='~/hacking/tools/massdns/bin/massdns -r ~/hacking/tools/massdns/lists/resolvers.txt -t A -o S bf-targets.txt -w livehosts.txt -s 4000'
+alias server='python -m http.server 4445'
+alias tunnel='ngrok http 4445'
+alias fuzz='ffuf -w ~/hacking/SecLists/content_discovery_all.txt -mc all -u'
+alias gr='~/go/src/github.com/tomnomnom/gf/gf'
+
+### FZF ###
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PATH=/opt/homebrew/bin:$PATH
+
+alias mat='osascript -e "tell application \"System Events\" to key code 126 using {command down}" && tmux neww "cmatrix"'
+
+# Nix!
+export NIX_CONF_DIR=$HOME/.config/nix
+export PATH=/run/current-system/sw/bin:$PATH
+
+alias cl='clear'
+
+# Nix!
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+    . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
+# End Nix
+
+export XDG_CONFIG_HOME="/Users/bilal/.config"
+
+eval "$(zoxide init zsh)"
+eval "$(atuin init zsh)"
+eval "$(direnv hook zsh)"
 
 ### startup ###
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $ZSH/oh-my-zsh.sh
+export ZSH="$HOME/.oh-my-zsh"
+source "$ZSH/oh-my-zsh.sh"
 eval "$(starship init zsh)"
+export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk@17/bin:$PATH"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/openjdk-21.jdk/Contents/Home"
+export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
